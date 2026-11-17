@@ -46,7 +46,7 @@ $script:sortField = $null
 $script:sortDesc = $false
 
 $form = New-Object System.Windows.Forms.Form
-$form.Text = "zh_cn 掃描工具"
+$form.Text = "MMCS - Minecraft Mod zh_cn Scanner"
 $form.Size = New-Object System.Drawing.Size([int]$settings.Width, [int]$settings.Height)
 $form.StartPosition = "Manual"
 if ("$($settings.Left)" -ne '' -and "$($settings.Top)" -ne '') {
@@ -58,15 +58,20 @@ $form.MinimumSize = New-Object System.Drawing.Size(740, 620)
 $form.AllowDrop = $true
 if ($settings.Maximized) { $form.WindowState = 'Maximized' }
 
-# ---------- 路徑輸入區 ----------
+# ---------- 頂部輸入區（Dock=Top） ----------
+$pnlTop = New-Object System.Windows.Forms.Panel
+$pnlTop.Dock = [System.Windows.Forms.DockStyle]::Top
+$pnlTop.Height = 118
+$pnlTop.Padding = New-Object System.Windows.Forms.Padding(8, 6, 8, 6)
+
 $lblPath = New-Object System.Windows.Forms.Label
-$lblPath.Location = New-Object System.Drawing.Point(12, 14)
+$lblPath.Location = New-Object System.Drawing.Point(8, 10)
 $lblPath.Size = New-Object System.Drawing.Size(640, 20)
 $lblPath.Text = "掃描路徑（可直接輸入、貼上，或把資料夾拖進來，按 Enter 掃描）："
 
 $txtPath = New-Object System.Windows.Forms.TextBox
-$txtPath.Location = New-Object System.Drawing.Point(12, 36)
-$txtPath.Size = New-Object System.Drawing.Size(770, 23)
+$txtPath.Location = New-Object System.Drawing.Point(8, 32)
+$txtPath.Size = New-Object System.Drawing.Size(600, 23)
 $txtPath.Anchor = [System.Windows.Forms.AnchorStyles]::Top -bor [System.Windows.Forms.AnchorStyles]::Left -bor [System.Windows.Forms.AnchorStyles]::Right
 $txtPath.AutoCompleteMode = [System.Windows.Forms.AutoCompleteMode]::SuggestAppend
 $txtPath.AutoCompleteSource = [System.Windows.Forms.AutoCompleteSource]::FileSystemDirectories
@@ -75,40 +80,39 @@ if ($InitialPath) { $txtPath.Text = $InitialPath }
 
 $btnScan = New-Object System.Windows.Forms.Button
 $btnScan.Text = "開始掃描"
-$btnScan.Location = New-Object System.Drawing.Point(790, 33)
+$btnScan.Location = New-Object System.Drawing.Point(616, 29)
 $btnScan.Size = New-Object System.Drawing.Size(110, 27)
 $btnScan.Anchor = [System.Windows.Forms.AnchorStyles]::Top -bor [System.Windows.Forms.AnchorStyles]::Right
 
-# ---------- 檔名比對 + 排除資料夾 ----------
 $lblPattern = New-Object System.Windows.Forms.Label
-$lblPattern.Location = New-Object System.Drawing.Point(12, 68)
-$lblPattern.Size = New-Object System.Drawing.Size(880, 20)
+$lblPattern.Location = New-Object System.Drawing.Point(8, 64)
+$lblPattern.Size = New-Object System.Drawing.Size(900, 20)
 $lblPattern.Text = "檔名比對（可含 * ? 萬用字元，例：zh_cn.*＝zh_cn 加任意副檔名；無萬用字元＝精確比對主檔名；zh_cn 開頭自動配對 zh_tw）："
 
 $txtPattern = New-Object System.Windows.Forms.TextBox
-$txtPattern.Location = New-Object System.Drawing.Point(12, 90)
+$txtPattern.Location = New-Object System.Drawing.Point(8, 86)
 $txtPattern.Size = New-Object System.Drawing.Size(320, 23)
 $txtPattern.Text = $settings.Pattern
 
 $lblExcl = New-Object System.Windows.Forms.Label
-$lblExcl.Location = New-Object System.Drawing.Point(344, 93)
+$lblExcl.Location = New-Object System.Drawing.Point(344, 89)
 $lblExcl.Size = New-Object System.Drawing.Size(170, 20)
 $lblExcl.Text = "排除資料夾（逗號分隔）："
 
 $txtExcl = New-Object System.Windows.Forms.TextBox
-$txtExcl.Location = New-Object System.Drawing.Point(520, 90)
+$txtExcl.Location = New-Object System.Drawing.Point(520, 86)
 $txtExcl.Size = New-Object System.Drawing.Size(270, 23)
 $txtExcl.Anchor = [System.Windows.Forms.AnchorStyles]::Top -bor [System.Windows.Forms.AnchorStyles]::Left -bor [System.Windows.Forms.AnchorStyles]::Right
 $txtExcl.Text = $settings.Excludes
 
-# ---------- 結果清單 ----------
+$pnlTop.Controls.AddRange(@($lblPath, $txtPath, $btnScan, $lblPattern, $txtPattern, $lblExcl, $txtExcl))
+
+# ---------- 結果清單（Dock=Fill，隨視窗縮放） ----------
 $lv = New-Object System.Windows.Forms.ListView
 $lv.View = "Details"
 $lv.FullRowSelect = $true
 $lv.GridLines = $true
-$lv.Location = New-Object System.Drawing.Point(12, 126)
-$lv.Size = New-Object System.Drawing.Size(880, 430)
-$lv.Anchor = [System.Windows.Forms.AnchorStyles]::Top -bor [System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Left -bor [System.Windows.Forms.AnchorStyles]::Right
+$lv.Dock = [System.Windows.Forms.DockStyle]::Fill
 
 $colNo = New-Object System.Windows.Forms.ColumnHeader
 $colNo.Text = "No."
@@ -130,53 +134,46 @@ $colPath.Text = "完整路徑"
 $colPath.Width = 445
 $lv.Columns.AddRange(@($colNo, $colType, $colLang, $colSize, $colTime, $colPath))
 
+# ---------- 底部狀態區（Dock=Bottom，永遠貼在最下方） ----------
+$pnlBottom = New-Object System.Windows.Forms.Panel
+$pnlBottom.Dock = [System.Windows.Forms.DockStyle]::Bottom
+$pnlBottom.Height = 52
+$pnlBottom.Padding = New-Object System.Windows.Forms.Padding(8, 6, 8, 6)
+
 $lblCount = New-Object System.Windows.Forms.Label
-$lblCount.Location = New-Object System.Drawing.Point(12, 566)
-$lblCount.Size = New-Object System.Drawing.Size(310, 20)
+$lblCount.Location = New-Object System.Drawing.Point(8, 10)
+$lblCount.Size = New-Object System.Drawing.Size(300, 20)
 $lblCount.Text = "共 0 個項目"
-$lblCount.Anchor = [System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Left
 
 $btnTreemap = New-Object System.Windows.Forms.Button
 $btnTreemap.Text = "樹狀圖"
-$btnTreemap.Location = New-Object System.Drawing.Point(334, 560)
-$btnTreemap.Size = New-Object System.Drawing.Size(105, 27)
-$btnTreemap.Anchor = [System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Left
+$btnTreemap.Location = New-Object System.Drawing.Point(330, 6)
+$btnTreemap.Size = New-Object System.Drawing.Size(100, 28)
 
 $btnCopy = New-Object System.Windows.Forms.Button
 $btnCopy.Text = "複製路徑"
-$btnCopy.Location = New-Object System.Drawing.Point(449, 560)
-$btnCopy.Size = New-Object System.Drawing.Size(105, 27)
-$btnCopy.Anchor = [System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Left
+$btnCopy.Location = New-Object System.Drawing.Point(440, 6)
+$btnCopy.Size = New-Object System.Drawing.Size(100, 28)
 
 $btnExport = New-Object System.Windows.Forms.Button
 $btnExport.Text = "匯出 CSV"
-$btnExport.Location = New-Object System.Drawing.Point(564, 560)
-$btnExport.Size = New-Object System.Drawing.Size(105, 27)
-$btnExport.Anchor = [System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Left
+$btnExport.Location = New-Object System.Drawing.Point(550, 6)
+$btnExport.Size = New-Object System.Drawing.Size(100, 28)
 
 $btnOpenFile = New-Object System.Windows.Forms.Button
 $btnOpenFile.Text = "開啟檔案"
-$btnOpenFile.Location = New-Object System.Drawing.Point(679, 560)
-$btnOpenFile.Size = New-Object System.Drawing.Size(105, 27)
-$btnOpenFile.Anchor = [System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Right
+$btnOpenFile.Location = New-Object System.Drawing.Point(660, 6)
+$btnOpenFile.Size = New-Object System.Drawing.Size(100, 28)
 
 $btnOpenContaining = New-Object System.Windows.Forms.Button
 $btnOpenContaining.Text = "開所在資料夾"
-$btnOpenContaining.Location = New-Object System.Drawing.Point(794, 560)
-$btnOpenContaining.Size = New-Object System.Drawing.Size(110, 27)
-$btnOpenContaining.Anchor = [System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Right
+$btnOpenContaining.Location = New-Object System.Drawing.Point(770, 6)
+$btnOpenContaining.Size = New-Object System.Drawing.Size(120, 28)
 
-$form.Controls.AddRange(@($lblPath, $txtPath, $btnScan, $lblPattern, $txtPattern, $lblExcl, $txtExcl, $lv, $lblCount, $btnTreemap, $btnCopy, $btnExport, $btnOpenFile, $btnOpenContaining))
+$pnlBottom.Controls.AddRange(@($lblCount, $btnTreemap, $btnCopy, $btnExport, $btnOpenFile, $btnOpenContaining))
 
-# ---------- 防止視窗拉縮時 ListView 遮住底部按鈕 ----------
-$lvTop = 126
-$btnAreaTop = 560
-$form.Add_Resize({
-    $avail = $btnAreaTop - 10 - $lvTop
-    if ($avail -lt 150) { $avail = 150 }
-    if ($lv.Height -ne $avail) { $lv.Height = $avail }
-})
-
+# ---------- 加入表單（Dock 順序：Top、Bottom、Fill） ----------
+$form.Controls.AddRange(@($pnlTop, $pnlBottom, $lv))
 # ---------- 背景掃描（Runspace） ----------
 $workerScript = @'
 param($Root, $Pattern, $Pair, $Excludes, $Sync)
