@@ -17,7 +17,7 @@ Add-Type -AssemblyName System.Drawing
 $script:settingsPath = Join-Path $PSScriptRoot 'find_zh_cn.settings.json'
 $settings = @{
     Path     = ''
-    Pattern  = 'zh_cn'
+    Pattern  = '*zh_cn*'
     Excludes = '.git, node_modules'
     Left     = ''
     Top      = ''
@@ -362,8 +362,8 @@ function Start-Scan {
     $pattern = $txtPattern.Text.Trim()
     if (-not $pattern) { $pattern = 'zh_cn' }
     $pair = $null
-    if ($pattern.ToLowerInvariant().StartsWith('zh_cn')) {
-        $pair = 'zh_tw' + $pattern.Substring(5)
+    if ($pattern.ToLowerInvariant().Contains('zh_cn')) {
+        $pair = $pattern.ToLowerInvariant().Replace('cn', 'tw')
     }
     $excludes = $txtExcl.Text
 

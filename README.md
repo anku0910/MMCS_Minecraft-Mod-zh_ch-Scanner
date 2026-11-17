@@ -37,12 +37,12 @@ A tiny, dependency-free PowerShell GUI that recursively scans a folder tree for 
 
 | 輸入 | 意義 |
 |---|---|
-| `zh_cn` | 精確比對主檔名、忽略副檔名：`zh_cn.json`、`zh_cn.txt`、`zh_cn`（無副檔名）、資料夾 `zh_cn` |
+| `*zh_cn*` | 檔名任何位置含 `zh_cn`（預設值）：`my_zh_cn.json`、`zh_cn.txt`、`zh_cn`（無副檔名）、資料夾 `zh_cn` |
 | `zh_cn.*` | `zh_cn` + 任意副檔名（不含無副檔名的檔案與資料夾） |
 | `zh_cn*` | 主檔名以 `zh_cn` 開頭（含 `zh_cn_backup.json`、`zh_cn_extra.md` 等） |
 | `*zh_cn*` | 檔名任何位置含 `zh_cn`（如 `my_zh_cn.json`） |
 
-比對值以 `zh_cn` 開頭時，會自動推導對應的 `zh_tw` 模式（`zh_cn` → `zh_tw`、`zh_cn.*` → `zh_tw.*`），同一資料夾內有 `zh_cn` 就會把旁邊的 `zh_tw` 一併列出，方便檢查缺漏。
+比對值包含 `zh_cn` 時，會自動把 `cn` 換成 `tw` 推導對應的 `zh_tw` 模式（`*zh_cn*` → `*zh_tw*`、`zh_cn` → `zh_tw`、`zh_cn.*` → `zh_tw.*`），同一資料夾內有 `zh_cn` 就會把旁邊的 `zh_tw` 一併列出，方便檢查缺漏。
 
 ### 樹狀圖（WizTree 風格）
 
