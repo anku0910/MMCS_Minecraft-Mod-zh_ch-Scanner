@@ -173,8 +173,8 @@ $btnOpenContaining.Size = New-Object System.Drawing.Size(120, 28)
 
 $pnlBottom.Controls.AddRange(@($lblCount, $btnTreemap, $btnCopy, $btnExport, $btnOpenFile, $btnOpenContaining))
 
-# ---------- 加入表單（Dock 順序：Top、Bottom、Fill） ----------
-$form.Controls.AddRange(@($pnlTop, $pnlBottom, $lv))
+# ---------- 加入表單（Dock 順序：Fill 先佔滿，Top/Bottom 再從邊緣切出） ----------
+$form.Controls.AddRange(@($lv, $pnlTop, $pnlBottom))
 # ---------- 背景掃描（Runspace） ----------
 $workerScript = @'
 param($Root, $Pattern, $Pair, $Excludes, $Sync)
