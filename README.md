@@ -56,7 +56,7 @@ A tiny, dependency-free PowerShell GUI that recursively scans a folder tree for 
 
 ### 排除資料夾
 
-預設排除 `.git`、`node_modules`（不遞迴進入）。可輸入逗號分隔的資料夾名稱清單自訂，設定會自動保存到 `find_zh_cn.settings.json`。
+預設排除 `.git`、`node_modules`（不遞迴進入）。可輸入逗號分隔的資料夾名稱清單自訂，設定會自動保存到 `find_zh_cn.settings.json`。比對值、路徑、排除清單會記住你上次輸入，下次開啟還是那個值——若想改回 `*zh_cn*` 預設，請把比對欄改成 `*zh_cn*` 掃描一次即可。
 
 ## 檔案說明
 
