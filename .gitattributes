@@ -1,4 +1,0 @@
-# Windows 腳本維持 CRLF，避免 PowerShell/cmd 在不同環境簽出行為改變
-*.ps1 text eol=crlf
-*.bat text eol=crlf
-*.md text eol=lf
