@@ -343,7 +343,7 @@ $script:scanTimer.Add_Tick({
     $sync = $script:scanSync
     if (-not $sync) { $script:scanTimer.Stop(); return }
     if ($sync.Done) { Finish-Scan }
-    else { $lblCount.Text = "掃描中… 已掃 $($sync.Scanned) 個資料夾（可按「停止掃描」取消）" }
+    else { $lblCount.Text = "掃描中… 已掃 $($sync.Scanned) 個資料夾" }
 })
 
 function Start-Scan {
