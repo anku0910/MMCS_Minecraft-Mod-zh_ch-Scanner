@@ -14,7 +14,7 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
 # ---------- 設定載入 ----------
-$script:settingsPath = Join-Path $PSScriptRoot 'find_zh_cn.settings.json'
+$script:settingsPath = Join-Path $PSScriptRoot 'MMCS.settings.json'
 $settings = @{
     Path     = ''
     Pattern  = '*zh_cn*'
