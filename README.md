@@ -1,13 +1,15 @@
-﻿# Minecraft zh_cn 語言檔掃描器 / zh_cn Language Scanner
+# MMCS - Minecraft Mod zh_cn Scanner
 
 這是一個輕量化的 Windows PowerShell GUI 工具，遞迴掃描指定資料夾底下所有主檔名為 `zh_cn`（任何副檔名）的檔案與資料夾，列出完整路徑、大小與修改日期，並自動偵測同資料夾的 `zh_tw` 配對檔。主要用來快速找出 Minecraft 模組包中缺漏的語言檔位置，不會建立或修改任何檔案。
+
+![掃描介面示範](Pic1.png)
 
 ---
 
 ## 使用方式
 
-1. **下載**：Code → Download ZIP（或 `git clone https://github.com/anku0910/moddedMinecraft-Scanner-zh_cn.git`）
-2. **啟動**：雙擊 `找 zh_cn 檔案.bat`
+1. **下載**：Code → Download ZIP（或 `git clone https://github.com/anku0910/MMCS_Minecraft-Mod-zh_ch-Scanner.git`）
+2. **啟動**：雙擊 `MMCS.bat`
 3. **輸入路徑**：直接打字（資料夾名稱自動補全）、貼上路徑，或把資料夾拖進視窗 / 拖到 `.bat` 上
 4. **掃描**：按 Enter 或點「開始掃描」
 5. **查看結果**：雙擊任一列＝開啟所在資料夾；選取後可「開啟檔案」、「複製路徑」、「匯出 CSV」
@@ -58,7 +60,7 @@
 
 ## 排除資料夾
 
-預設排除 `.git`、`node_modules`（不遞迴進入）。可輸入逗號分隔的資料夾名稱清單自訂，設定會自動保存到 `find_zh_cn.settings.json`。比對值、路徑、排除清單會記住你上次輸入，下次開啟還是那個值——若想改回 `*zh_cn*` 預設，請把比對欄改成 `*zh_cn*` 掃描一次即可。
+預設排除 `.git`、`node_modules`（不遞迴進入）。可輸入逗號分隔的資料夾名稱清單自訂，設定會自動保存到 `MMCS.settings.json`。比對值、路徑、排除清單會記住你上次輸入，下次開啟還是那個值——若想改回 `*zh_cn*` 預設，請把比對欄改成 `*zh_cn*` 掃描一次即可。
 
 ---
 
@@ -66,6 +68,7 @@
 
 | 檔案 | 說明 |
 |------|------|
-| `找 zh_cn 檔案.bat` | 啟動器（雙擊入口，內容純 ASCII 避免編碼問題） |
-| `find_zh_cn.ps1` | 主程式（PowerShell WinForms GUI，UTF-8 with BOM） |
-| `find_zh_cn.settings.json` | 執行後自動產生的個人設定（不會上傳） |
+| `MMCS.bat` | 啟動器（雙擊入口，內容純 ASCII 避免編碼問題） |
+| `MMCS.ps1` | 主程式（PowerShell WinForms GUI，UTF-8 with BOM） |
+| `MMCS.settings.json` | 執行後自動產生的個人設定（不會上傳） |
+| `Pic1.png` | 介面示範圖片 |
