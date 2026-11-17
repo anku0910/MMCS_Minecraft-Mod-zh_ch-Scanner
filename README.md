@@ -83,8 +83,3 @@
 | `find_zh_cn.ps1` | 主程式（PowerShell WinForms GUI，UTF-8 with BOM） |
 | `find_zh_cn.settings.json` | 執行後自動產生的個人設定（已 gitignore，不會上傳） |
 
----
-
-## 📜 授權
-
-MIT License — 見 [LICENSE](LICENSE)
