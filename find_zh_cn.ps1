@@ -54,7 +54,7 @@ if ("$($settings.Left)" -ne '' -and "$($settings.Top)" -ne '') {
 } else {
     $form.StartPosition = "CenterScreen"
 }
-$form.MinimumSize = New-Object System.Drawing.Size(700, 440)
+$form.MinimumSize = New-Object System.Drawing.Size(740, 620)
 $form.AllowDrop = $true
 if ($settings.Maximized) { $form.WindowState = 'Maximized' }
 
@@ -167,6 +167,15 @@ $btnOpenContaining.Size = New-Object System.Drawing.Size(110, 27)
 $btnOpenContaining.Anchor = [System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Right
 
 $form.Controls.AddRange(@($lblPath, $txtPath, $btnScan, $lblPattern, $txtPattern, $lblExcl, $txtExcl, $lv, $lblCount, $btnTreemap, $btnCopy, $btnExport, $btnOpenFile, $btnOpenContaining))
+
+# ---------- 防止視窗拉縮時 ListView 遮住底部按鈕 ----------
+$lvTop = 126
+$btnAreaTop = 560
+$form.Add_Resize({
+    $avail = $btnAreaTop - 10 - $lvTop
+    if ($avail -lt 150) { $avail = 150 }
+    if ($lv.Height -ne $avail) { $lv.Height = $avail }
+})
 
 # ---------- 背景掃描（Runspace） ----------
 $workerScript = @'
