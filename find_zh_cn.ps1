@@ -137,12 +137,13 @@ $lv.Columns.AddRange(@($colNo, $colType, $colLang, $colSize, $colTime, $colPath)
 # ---------- 底部狀態區（Dock=Bottom，永遠貼在最下方） ----------
 $pnlBottom = New-Object System.Windows.Forms.Panel
 $pnlBottom.Dock = [System.Windows.Forms.DockStyle]::Bottom
-$pnlBottom.Height = 52
+$pnlBottom.Height = 90
 $pnlBottom.Padding = New-Object System.Windows.Forms.Padding(8, 6, 8, 6)
 
 $lblCount = New-Object System.Windows.Forms.Label
-$lblCount.Location = New-Object System.Drawing.Point(8, 10)
-$lblCount.Size = New-Object System.Drawing.Size(300, 20)
+$lblCount.Location = New-Object System.Drawing.Point(8, 8)
+$lblCount.AutoSize = $true
+$lblCount.MaximumSize = New-Object System.Drawing.Size(520, 0)
 $lblCount.Text = "共 0 個項目"
 
 $btnTreemap = New-Object System.Windows.Forms.Button
